@@ -1,4 +1,41 @@
+@import './variables';
+@import "card";
+
 .App-logo {
-  height: 10vmin;
-  pointer-events: none;
+  height: 4vmin;
+}
+
+.Navigation-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: $space-cadet;
+  padding: 16px;
+  .app-name {
+    margin: 0;
+    color: $manatee;
+  }
+}
+
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 16px 0;
+  justify-content: center;
+}
+
+.footer-container {
+  width: 100%;
+  padding: 14px;
+  background-color: $space-cadet;
+  color: $manatee;
+
+}
+
+
+.home-container {
+  margin: 0 8px;
+  padding-top: 100px;
+  height: calc(100% - 100px);
 }

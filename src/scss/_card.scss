@@ -1,0 +1,41 @@
+@import "variables";
+
+.product-card-container {
+  background-color: $white;
+  border: $alice-blue solid 1px;
+  height: 400px;
+  border-radius: 4px;
+  background-size: cover;
+  width: calc(25% - 2rem);
+  overflow: hidden;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  .product-card-details {
+    padding: 1rem;
+    &_title {
+      margin: 0 0 8px 0;
+    }
+    &_subtitle {
+      margin: 0;
+      color: $manatee;
+    }
+  }
+  .product-card_image {
+    img {
+      width: 100%;
+      max-height: 100%;
+      object-fit: cover;
+      height: auto;
+  }
+
+  }
+}
+
+.product-card-container:not(:last-child){
+  margin-right: 1rem;
+}
+
+.product-card-container:hover {
+  box-shadow: 0 0.5rem 1rem rgba($space-cadet, 0.2);
+  border: $alice-blue solid 1px;
+}
