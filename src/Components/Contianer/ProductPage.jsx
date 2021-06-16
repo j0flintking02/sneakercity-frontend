@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import {Link, useParams} from "react-router-dom";
 import moment from "moment";
+import Cookies from 'universal-cookie';
 
 const ProductPage = (props) => {
+    let {id} = useParams();
     const [product] = useState({
-        id: 2,
+        id,
         brand_name: 'Nike',
         model: 'Air Max 270',
         price: '200',
@@ -15,10 +17,34 @@ const ProductPage = (props) => {
         quantity: 12
     });
     const [sizeSelect, setSizeSelected] = useState(null);
+    const cookies = new Cookies();
 
-    let {id} = useParams();
-    const handleCart = () => {
-        console.log()
+    const handleCart = (prod) => {
+        let product = []
+        let quantity = 0
+        const cart = cookies.get('cart')
+        if (cart){
+            const productToUpdateIndex = cart.findIndex(sm => sm.id === prod.id);
+            const productToUpdate = cart.filter(sm => sm.id === prod.id);
+            if (productToUpdate && productToUpdateIndex !== -1) {
+                if (prod.size === productToUpdate[productToUpdateIndex].size){
+                    cart[productToUpdateIndex] = {...prod, quantity: (productToUpdate[productToUpdateIndex].quantity)+=1};
+                    console.log(cart, 'old size');
+                    cookies.set('cart', cart, { path: '/' });
+                } else {
+                    cart[productToUpdateIndex] = {...prod, size: prod.size, quantity: quantity=+1}
+                    console.log(cart, 'new size');
+                    cookies.set('cart', cart, { path: '/' });
+                }
+            } else {
+                product = [...cart, {id:prod.id, size: prod.size, quantity: quantity=+1}];
+                cookies.set('cart', product, { path: '/' });
+            }
+
+        } else {
+            product = [{id:prod.id, size: prod.size, quantity: quantity=+1}];
+            cookies.set('cart', product, { path: '/' });
+        }
     }
     return (
         <div className="productPage-container">
@@ -26,8 +52,9 @@ const ProductPage = (props) => {
                 <Link to='/listings'> Back </Link>
             </div>
             <div className="product-card-container" style={{display: 'flex', height: 'calc(100vh - 17rem)'}}>
-                <div className="cover-image">
-                    <img src={product.picture} alt="product"/>
+                <div className="cover-image" style={{
+                    backgroundImage: `url(${product.picture})`,
+                }}>
                 </div>
                 <div className="product-card-details">
                     <h1>{product.brand_name}</h1>
@@ -49,7 +76,7 @@ const ProductPage = (props) => {
                                     :null}>{size}</li>
                         ))}
                     </ul>
-                    <button className="btn" onClick={()=> handleCart() }>Add To Cart</button>
+                    <button className="btn" onClick={()=> handleCart({id, size:sizeSelect}) }>Add To Cart</button>
                 </div>
             </div>
         </div>

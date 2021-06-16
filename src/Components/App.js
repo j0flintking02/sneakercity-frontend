@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import '../scss/App.scss';
 import { SettingsContext, settings } from "../hooks/settings-context";
 
@@ -15,6 +15,9 @@ function App() {
               <Router>
                   <Navigation />
                   <Switch>
+                      <Route exact path="/">
+                          <Redirect to="/listings" />
+                      </Route>
                       <Route exact path="/listings" component={Home} />
                       <Route exact path="/listings/:id" component={ProductPage} />
                   </Switch>
