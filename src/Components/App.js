@@ -4,6 +4,7 @@ import { SettingsContext, settings } from "../hooks/settings-context";
 
 import Navigation from './Shared/Navigation'
 import Home from "./Contianer/Home";
+import ProductPage from "./Contianer/ProductPage";
 import Footer from "./Shared/Footer";
 
 
@@ -14,7 +15,8 @@ function App() {
               <Router>
                   <Navigation />
                   <Switch>
-                      <Route exact path="/" component={Home} />
+                      <Route exact path="/listings" component={Home} />
+                      <Route exact path="/listings/:id" component={ProductPage} />
                   </Switch>
               </Router>
               <Footer />

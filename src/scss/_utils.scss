@@ -1,0 +1,22 @@
+@import "variables";
+
+a {
+  text-decoration: none;
+  color: $space-cadet;
+}
+ul {
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+.btn {
+  background-color: $space-cadet;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 1rem;
+}
