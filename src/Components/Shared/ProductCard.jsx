@@ -14,9 +14,11 @@ function ProductCard({product}) {
                     <span className="product-card-details_subtitle">${product.price}</span>
                 </div>
                 <p className="product-card-details_subtitle">{product.model}</p>
+                {/*<p className="product-card-details_subtitle">{product.release_date}</p>*/}
             </div>
-            <div className="product-card_image">
-                <img src={product.picture} alt="product"/>
+            <div className="cover-image" style={{
+                backgroundImage: `url(${product.picture})`,
+            }}>
             </div>
         </div>
     );
