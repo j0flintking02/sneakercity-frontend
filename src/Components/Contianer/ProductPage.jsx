@@ -1,21 +1,19 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Link, useParams} from "react-router-dom";
+import axios from 'axios'
 import moment from "moment";
 import Cookies from 'universal-cookie';
 
 const ProductPage = (props) => {
     let {id} = useParams();
-    const [product] = useState({
-        id,
-        brand_name: 'Nike',
-        model: 'Air Max 270',
-        price: '200',
-        picture: 'https://static.nike.com/a/images/c_limit,w_600,f_auto/t_product_v1/s6dp2gck3oukxj9csz5y/air-max-270-shoe-nnTrqDGR.png',
-        release_date: new Date(2020,2,20),
-        description: "lorem ipsum",
-        sizes: [39, 40, 41,43],
-        quantity: 12
-    });
+    const [product, setProduct] = useState(null);
+    useEffect(()=>{
+        axios.get(`http://localhost:5000/api/v1/listings/${id}`).then(response => {
+            setProduct(response.data.data)
+        }).catch((e) => {
+            console.log(e)
+        })
+    },[])
     const [sizeSelect, setSizeSelected] = useState(null);
     const cookies = new Cookies();
 
@@ -51,6 +49,7 @@ const ProductPage = (props) => {
             <div className="back-button">
                 <Link to='/listings'> Back </Link>
             </div>
+            {product &&
             <div className="product-card-container" style={{display: 'flex', height: 'calc(100vh - 17rem)'}}>
                 <div className="cover-image" style={{
                     backgroundImage: `url(${product.picture})`,
@@ -78,7 +77,7 @@ const ProductPage = (props) => {
                     </ul>
                     <button className="btn" onClick={()=> handleCart({id, size:sizeSelect}) }>Add To Cart</button>
                 </div>
-            </div>
+            </div>}
         </div>
     )
 };
