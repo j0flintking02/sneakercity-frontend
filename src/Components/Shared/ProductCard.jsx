@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 ProductCard.propTypes = {
-product: PropTypes.shape({}).isRequired
+    product: PropTypes.shape({}).isRequired
 };
 
 function ProductCard({product}) {

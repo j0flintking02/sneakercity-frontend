@@ -7,9 +7,12 @@ Sneaker City is a brand new online-only store for sneaker enthusiasts. This isnâ
 
 #### How to run the application
 
+- Ensure you have the backend repo running
+[API endpoint Repository](https://github.com/j0flintking02/sneakercity-backend)
+- Cd to the project folder
+
 ```shell
 yarn install
 yarn start
 ```
 
-[API endpoint](https://github.com/j0flintking02/sneakercity-backend)

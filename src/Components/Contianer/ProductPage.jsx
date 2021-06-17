@@ -1,19 +1,19 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useParams} from "react-router-dom";
 import axios from 'axios'
 import moment from "moment";
 import Cookies from 'universal-cookie';
 
-const ProductPage = (props) => {
+const ProductPage = () => {
     let {id} = useParams();
     const [product, setProduct] = useState(null);
-    useEffect(()=>{
+    useEffect(() => {
         axios.get(`http://localhost:5000/api/v1/listings/${id}`).then(response => {
             setProduct(response.data.data)
         }).catch((e) => {
             console.log(e)
         })
-    },[])
+    }, [id])
     const [sizeSelect, setSizeSelected] = useState(null);
     const cookies = new Cookies();
 
@@ -21,27 +21,13 @@ const ProductPage = (props) => {
         let product = []
         let quantity = 0
         const cart = cookies.get('cart')
-        if (cart){
-            const productToUpdateIndex = cart.findIndex(sm => sm.id === prod.id);
-            const productToUpdate = cart.filter(sm => sm.id === prod.id);
-            if (productToUpdate && productToUpdateIndex !== -1) {
-                if (prod.size === productToUpdate[productToUpdateIndex].size){
-                    cart[productToUpdateIndex] = {...prod, quantity: (productToUpdate[productToUpdateIndex].quantity)+=1};
-                    console.log(cart, 'old size');
-                    cookies.set('cart', cart, { path: '/' });
-                } else {
-                    cart[productToUpdateIndex] = {...prod, size: prod.size, quantity: quantity=+1}
-                    console.log(cart, 'new size');
-                    cookies.set('cart', cart, { path: '/' });
-                }
-            } else {
-                product = [...cart, {id:prod.id, size: prod.size, quantity: quantity=+1}];
-                cookies.set('cart', product, { path: '/' });
-            }
+        if (cart) {
+            product = [...cart, {id: prod.id, size: prod.size, quantity: quantity += 1}];
+            cookies.set('cart', product, {path: '/', sameSite: 'None'});
 
         } else {
-            product = [{id:prod.id, size: prod.size, quantity: quantity=+1}];
-            cookies.set('cart', product, { path: '/' });
+            product = [{id: prod.id, size: prod.size, quantity: quantity += 1}];
+            cookies.set('cart', product, {path: '/', sameSite: 'None'});
         }
     }
     return (
@@ -67,15 +53,16 @@ const ProductPage = (props) => {
                                 key={index}
                                 onClick={() => setSizeSelected(size)}
                                 style={sizeSelect === size
-                                    ?{
-                                    color: '#2b2d42ff',
+                                    ? {
+                                        color: '#2b2d42ff',
                                         fontWeight: '700',
                                         border: '#2b2d42ff solid 1px',
-                                        boxShadow: '0 0.5rem 1rem rgba(#2b2d42ff, 0.2)'}
-                                    :null}>{size}</li>
+                                        boxShadow: '0 0.5rem 1rem rgba(#2b2d42ff, 0.2)'
+                                    }
+                                    : null}>{size}</li>
                         ))}
                     </ul>
-                    <button className="btn" onClick={()=> handleCart({id, size:sizeSelect}) }>Add To Cart</button>
+                    <button className="btn" onClick={() => handleCart({id, size: sizeSelect})}>Add To Cart</button>
                 </div>
             </div>}
         </div>
