@@ -5,16 +5,16 @@ import Cookies from 'universal-cookie';
 import {Link} from "react-router-dom";
 import {SettingsContext} from "../../hooks/settings-context";
 
-function Navigation() {
+function Navigation(props) {
     const cookies = new Cookies();
-    const [cart] = useState(cookies.get('cart'))
+    const [cart, setCart] = useState(cookies.get('cart'))
     useEffect(() => {
+        console.log(props)
         return () => {
-            cookies.addChangeListener((data) => {
-                console.log(data)
-            })
+            setCart(cookies.get('cart'))
+            props.setUpdated(false)
         };
-    });
+    },[props.updated] );
 
     return (
         <SettingsContext.Consumer>
