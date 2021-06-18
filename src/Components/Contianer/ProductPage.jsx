@@ -27,25 +27,41 @@ const ProductPage = () => {
         let product = []
         let quantity = 0
         const cart = cookies.get('cart')
+        if(!prod.size) return addToast('Please select a size', {appearance: 'error', autoDismiss: true});
         if (cart) {
-            product = [...cart, {id: prod.id, size: prod.size, quantity: quantity += 1}];
-            cookies.set('cart', product, {path: '/', sameSite: 'Strict'});
-            setUpdated(true)
-            addToast('Added to cart', { appearance: 'success', autoDismiss: true });
+            const productToUpdateIndex = cart.findIndex(sm => sm.id === prod.id && sm.size === prod.size);
+            const productToUpdate = cart.filter(sm => sm.id === prod.id && sm.size === prod.size);
+
+            if (productToUpdate && productToUpdateIndex !== -1) {
+            // Increase the product quantity if it already exists
+                cart[productToUpdateIndex] = {...prod, quantity: ++(productToUpdate[0].quantity)};
+                const newCart = cart.filter((item, index) => index !== productToUpdateIndex);
+                newCart.splice(productToUpdateIndex, 0, productToUpdate[0]);
+                cookies.set('cart', [...newCart], {path: '/'});
+                setUpdated(true)
+                addToast('Edited your cart cart', {appearance: 'success', autoDismiss: true});
+            } else {
+                // Update the cart if there are already products in the cart
+                product = [...cart, {...prod, id: prod.id, size: prod.size, quantity: quantity += 1}];
+                cookies.set('cart', product, {path: '/', sameSite: 'Strict'});
+                setUpdated(true)
+                addToast('Added to cart', {appearance: 'success', autoDismiss: true});
+            }
 
         } else {
-            product = [{id: prod.id, size: prod.size, quantity: quantity += 1}];
+            // Add a new product to the cart is empty
+            product = [{...prod, id: prod.id, size: prod.size, quantity: quantity += 1}];
             cookies.set('cart', product, {path: '/', sameSite: 'Strict'});
             setUpdated(true)
-            addToast('Added to cart', { appearance: 'success', autoDismiss: true });
+            addToast('Added to cart', {appearance: 'success', autoDismiss: true});
         }
     }
     return (
         <>
-            <Navigation updated={updated} setUpdated={setUpdated} />
+            <Navigation updated={updated} setUpdated={setUpdated}/>
             <div className="productPage-container">
                 <div className="back-button">
-                    <Link to='/listings'> Back </Link>
+                    <Link to='/listings'> {'<'} Back </Link>
                 </div>
                 {product &&
                 <div className="product-card-container" style={{display: 'flex', height: 'calc(100vh - 17rem)'}}>
@@ -74,7 +90,8 @@ const ProductPage = () => {
                                         : null}>{size}</li>
                             ))}
                         </ul>
-                        <button className="btn" onClick={() => handleCart({id, size: sizeSelect})}>Add To Cart</button>
+                        <button className="btn" onClick={() => handleCart({...product, size: sizeSelect})}>Add To Cart
+                        </button>
                     </div>
                 </div>}
             </div>

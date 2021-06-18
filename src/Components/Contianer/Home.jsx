@@ -9,7 +9,6 @@ function Home() {
     const [productList, setProductList] = useState([]);
     useEffect(() => {
         axios.get('http://localhost:5000/api/v1/listings').then(response => {
-            console.log(response.data.data);
             const getList = response.data.data.slice(0, 10)
             setProductList(getList)
         }).catch((e) => {
